@@ -16,6 +16,8 @@ using WebApp.Helper;
 using DomainModule.ServiceInterface.Email;
 using DomainModule.Dto.Email;
 using System.Security.Cryptography;
+using DomainModule.ServiceInterface.Account;
+using DomainModule.Enums;
 
 namespace WebApp.Areas.Account.Controllers
 {
@@ -28,13 +30,16 @@ namespace WebApp.Areas.Account.Controllers
         private readonly IToastNotification _notify;
         private readonly UserServiceInterface _userService;
         private readonly IEmailSenderService _emailService;
+        private readonly AppSettingsRepositoryInterface _appSettingRepo;
+        private readonly AppSettingsServiceInterface _appSettingService;
         public UserController(UserRepositoryInterface userRepository,
             IToastNotification notify,
             UserServiceInterface userService,
             RoleManager<IdentityRole> roleManager,
-            UserManager<User> userManager
-,
-            IEmailSenderService emailService)
+            UserManager<User> userManager,
+            IEmailSenderService emailService,
+            AppSettingsRepositoryInterface appSettingRepo,
+            AppSettingsServiceInterface appSettingService)
         {
             _userRepo = userRepository;
             _notify = notify;
@@ -42,6 +47,8 @@ namespace WebApp.Areas.Account.Controllers
             _roleManager = roleManager;
             _userManager = userManager;
             _emailService = emailService;
+            _appSettingRepo = appSettingRepo;
+            _appSettingService = appSettingService;
         }
         [Authorize(Policy = "User-View")]
         public async Task<IActionResult> Index()
@@ -72,6 +79,21 @@ namespace WebApp.Areas.Account.Controllers
             var roles = await _roleManager.Roles.Where(a => a.Name != "SuperAdmin").ToListAsync();
             ViewBag.RoleList = new SelectList(roles, "Id", "Name");
             return View();
+        }
+        public IActionResult Settings()
+        {
+            try
+            {
+                var userId = GetCurrentUserExtension.GetCurrentUserId(this);
+                var model = _appSettingRepo.GetAppSettingModel(userId);
+               
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+                _notify.AddErrorToastMessage(ex.Message);
+                return RedirectToAction("Index", "Home", new { area = "" });
+            }
         }
         [HttpPost]
         public async Task<IActionResult> Create(UserViewModel model)
@@ -120,6 +142,9 @@ namespace WebApp.Areas.Account.Controllers
                 var user = await _userManager.FindByIdAsync(id).ConfigureAwait(true) ?? throw new UserNotFoundException();
                 var userRoles = await _userManager.GetRolesAsync(user);
                 var allRoles = await _roleManager.Roles.Where(a => userRoles.Contains(a.Name)).ToListAsync().ConfigureAwait(true);
+                var CurrentUser = await GetCurrentUserExtension.GetCurrentUser(this);
+                ViewBag.IsSuperAdmin = await _userManager.IsInRoleAsync(CurrentUser, DomainModule.Entity.User.TypeSuperAdmin.ToString());
+
 
                 var userUpdateModel = new UserEditViewModel()
                 {
@@ -157,7 +182,7 @@ namespace WebApp.Areas.Account.Controllers
                 await _userService.Edit(editDto);
 
                 _notify.AddSuccessToastMessage("Updated Successfully.");
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Edit), new { id = model.Id });
             }
             catch (Exception ex)
             {
@@ -233,7 +258,7 @@ namespace WebApp.Areas.Account.Controllers
                     var result = await _userManager.ResetPasswordAsync(user, token, new_password).ConfigureAwait(true);
                     if (result.Succeeded)
                     {
-                        var htmlString = $"<p>Dear {user.Name}({user.UserName}),<br/><br/>&emsp;&emsp; Please use <b>{new_password}</b> as new password to login to your account.  <br/><br/>Regards,<br/>CommonWorld</p>";
+                        var htmlString = $"<p>Dear {user.Name} ({user.UserName}),<br/><br/>\r\n&emsp;&emsp; Welcome back! Your password has been successfully reset. Use <b>{new_password}</b> as your new login key to access your account.\r\n<br/>\r\n&emsp;&emsp; Remember to <b>update</b> your password for added security.\r\n<br/><br/>\r\nRegards,<br/>\r\nCommonWorld\r\n</p>";
                         var message = new MessageDto(new string[] { user.Email }, "User Password Reset.", htmlString, null);
                         await _emailService.SendEmailAsync(message).ConfigureAwait(true);
                     }
