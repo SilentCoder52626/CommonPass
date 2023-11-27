@@ -49,8 +49,30 @@
             </div>
         </li>
     }
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Pass Details
+    </div>
+
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePass"
+           aria-expanded="true" aria-controls="collapsePass">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Accounts</span>
+        </a>
+        <div id="collapsePass" class="collapse" aria-labelledby="headingPass" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+
+                <a class="collapse-item" asp-area="Pass" asp-controller="Accounts" asp-action="Index">Accounts</a>
+            </div>
+        </div>
+    </li>
     @if (IsSuperAdmin)
     {
+        <div class="sidebar-heading">
+           Logs
+        </div>
+
         <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseLog"
                aria-expanded="true" aria-controls="headingLog">

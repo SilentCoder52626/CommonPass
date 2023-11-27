@@ -23,6 +23,7 @@ namespace WebApp.DefaultDataSeeder
                 {
                     "User-ResetPassword",
                     "User-Update",
+                    "Accounts-View",
 
                 };
                 //Roles

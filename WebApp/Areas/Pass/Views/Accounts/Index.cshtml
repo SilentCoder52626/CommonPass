@@ -1,0 +1,53 @@
+﻿@model AccountDetailModel
+@{
+    ViewData["Title"] = "Accounts-CommonPass";
+}
+<div class="container-fluid">
+    <div class="h3 mb-2 text-gray-800">
+        Accounts
+
+        @* <a class="btn btn-success" asp-area="Menu" asp-controller="CompanyType" asp-action="Create">
+            <i class="fa fa-plus"></i>
+        </a> *@
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <table class="table table-bordered " id="ViewTable">
+                <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Account</th>
+                        <th>Password</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        var i = 1;
+                    }
+                    @foreach (var data in Model.Details)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td><input type="text" class="form-control" readonly value="@data.Account" /></td>
+                            <td><input type="password" value="@data.Password" class="form-control" readonly /></td>
+                            <td>
+                                @* <a class="btn btn-warning" asp-area="Menu" asp-controller="CompanyType" asp-action="Update" asp-route-id="@data.Id">
+                                    <i class="fas fa-edit"></i>
+                                </a> *@
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script>
+        $("#ViewTable").DataTable();
+    </script>
+}

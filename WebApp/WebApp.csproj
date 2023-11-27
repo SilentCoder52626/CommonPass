@@ -25,7 +25,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
     <PackageReference Include="NLog" Version="5.2.3" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.3" />
     <PackageReference Include="NToastNotify" Version="8.0.0" />
@@ -39,6 +39,8 @@
 
   <ItemGroup>
     <Folder Include="Areas\API\Models\" />
+    <Folder Include="Areas\Pass\Data\" />
+    <Folder Include="Areas\Pass\Models\" />
   </ItemGroup>
 
 </Project>

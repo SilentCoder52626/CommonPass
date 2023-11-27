@@ -39,7 +39,9 @@
                                             <input type="text" class="form-control Key" readonly value="@data.Key" name="Key" />
                                         </td>
                                         <td>
-                                            @Html.DropDownList("Value",new SelectList(YesNoDropDown,data.Value),"--Select--",new {@class="form-control Value drop-down"})
+                                            @* @Html.DropDownList("Value",new SelectList(YesNoDropDown,data.Value),"--Select--",new {@class="form-control Value drop-down"}) *@
+                                            <input type="password" class="form-control Value" value="@data.Value" name="Value" />
+
                                         </td>
                                     </tr>
                                     i++;

@@ -8,6 +8,6 @@ namespace DomainModule.Enums
 {
     public enum AppSettingsEnum
     {
-        IsImportant
+        EncryptionKey
     }
 }

@@ -9,6 +9,7 @@ using NLog.Web.LayoutRenderers;
 using WebApp.ViewModel;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System.Security.Cryptography;
+using DomainModule.Dto.Pass;
 
 namespace WebApp.ActionFilters
 {
@@ -58,6 +59,10 @@ namespace WebApp.ActionFilters
                     {
                         var modelValue = (LoginViewModel)argument.Value;
                         argumentsData.Add(new KeyValuePair<string, object>(argument.Key, new LoginViewModel() { Email = modelValue.Email, ExternalProviders = modelValue.ExternalProviders, RememberMe = modelValue.RememberMe, ReturnUrl = modelValue.ReturnUrl, Password = PasswordHasher(modelValue.Password) }));
+                    }else if(modelName == "AccountDetailsDto")
+                    {
+                        var modelValue = (AccountDetailsDto)argument.Value;
+                        argumentsData.Add(new KeyValuePair<string, object>(argument.Key, new AccountDetailsDto() { Account = modelValue.Account, Id = modelValue.Id, UserId = modelValue.UserId, Password = PasswordHasher(modelValue.Password) }));
                     }
                     else
                     {

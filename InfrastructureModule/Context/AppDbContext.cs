@@ -37,6 +37,8 @@ namespace InfrastructureModule.Context
             builder.ApplyConfiguration(new AuditEntityMapping());
             builder.ApplyConfiguration(new ActivityEntityMapping());
             builder.ApplyConfiguration(new AppSettingsEntityMapping());
+
+            builder.ApplyConfiguration(new AccountDetailsEntityMapping());
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
