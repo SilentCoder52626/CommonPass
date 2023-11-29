@@ -42,7 +42,10 @@ namespace ServiceModule.Service.Pass
                     {
                         AccountDetails = _detailsRepo.GetById(dto.Id) ?? throw new CustomException("Account details not found.");
                         AccountDetails.Account = dto.Account;
-                        AccountDetails.Password = EncryptString(dto.Password, CipherKey);
+                        if (dto.Password != AccountDetails.DefaultPasswordString)
+                        {
+                            AccountDetails.Password = EncryptString(dto.Password, CipherKey);
+                        }
                         AccountDetails.UserId = userId;
                         _detailsRepo.Update(AccountDetails);
                     }
@@ -51,6 +54,7 @@ namespace ServiceModule.Service.Pass
                         AccountDetails.Account = dto.Account;
                         AccountDetails.Password = EncryptString(dto.Password, CipherKey);
                         AccountDetails.UserId = userId;
+
                         _detailsRepo.Insert(AccountDetails);
                     }
                     _unitOfWork.Complete();
@@ -81,7 +85,7 @@ namespace ServiceModule.Service.Pass
             }
         }
 
-        public void ReEncryptPassword(string userId)
+        public void ReEncryptPassword(string userId, string newKey)
         {
             using (var tx = _unitOfWork.BeginTransaction())
             {
@@ -91,13 +95,28 @@ namespace ServiceModule.Service.Pass
                 foreach (var account in AccountDetailsOfUser)
                 {
                     var currentPass = DecryptString(account.Password, CipherKey);
-                    account.Password = EncryptString(currentPass, CipherKey);
+                    account.Password = EncryptString(currentPass, newKey);
                     _detailsRepo.Update(account);
                 }
                 _unitOfWork.Complete();
                 tx.Commit();
 
             }
+        }
+        public void ReEncryptPasswordWithoutCommit(string userId, string newKey)
+        {
+
+            var CipherKey = _settingRepo.GetByKey(AppSettingsEnum.EncryptionKey.ToString(), userId)?.Value ?? throw new CustomException("Please set your private encryption key first.");
+
+            var AccountDetailsOfUser = _detailsRepo.GetQueryable().Where(a => a.UserId == userId).ToList();
+            foreach (var account in AccountDetailsOfUser)
+            {
+                var currentPass = DecryptString(account.Password, CipherKey);
+                account.Password = EncryptString(currentPass, newKey);
+                _detailsRepo.Update(account);
+            }
+            _unitOfWork.Complete();
+
         }
 
         private static string EncryptString(string plainText, string key)

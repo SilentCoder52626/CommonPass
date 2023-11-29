@@ -24,7 +24,7 @@ namespace InfrastructureModule.Repository.Pass
             {
                 Account = x.Account,
                 Id = x.Id,
-                Password = "StronglyEncrypted",
+                Password = AccountDetails.DefaultPasswordString,
                 UserId = userId
 
             }).ToList();

@@ -11,6 +11,7 @@ namespace DomainModule.ServiceInterface.Pass
     {
         int AddOrUpdate(AccountDetailsDto dto,string userId);
         string DecryptAndShowPassword(int id,string userId);
-        void ReEncryptPassword(string userId);
+        void ReEncryptPassword(string userId,string newKey);
+        void ReEncryptPasswordWithoutCommit(string userId,string newKey);
     }
 }

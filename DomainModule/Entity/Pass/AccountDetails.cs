@@ -8,6 +8,7 @@ namespace DomainModule.Entity.Pass
 {
     public class AccountDetails
     {
+        public static string DefaultPasswordString = "EncryptedPassword";
         public virtual int Id { get; set; }
         public virtual string Account { get; set; }
         public virtual string Password { get; set; }

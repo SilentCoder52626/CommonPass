@@ -1,4 +1,5 @@
-﻿@model AppSettingModel
+﻿@using DomainModule.Enums;
+@model AppSettingModel
 
 @{
     var YesNoDropDown = new List<string>()
@@ -36,12 +37,15 @@
                                         <td>@i</td>
                                         <td>
                                             <input type="hidden" value="@data.UserId" class="UserId" />
-                                            <input type="text" class="form-control Key" readonly value="@data.Key" name="Key" />
+                                            <input type="hidden" value="@data.Key" class="Key" />
+                                            <input type="text" class="form-control" readonly value="@data.DisplayName" name="DisplayName" />
                                         </td>
                                         <td>
-                                            @* @Html.DropDownList("Value",new SelectList(YesNoDropDown,data.Value),"--Select--",new {@class="form-control Value drop-down"}) *@
                                             <input type="password" class="form-control Value" value="@data.Value" name="Value" />
-
+                                            @if (data.Key == AppSettingsEnum.EncryptionKey.ToString())
+                                            {
+                                                <span class="text-danger" id="errors"></span>
+                                            }
                                         </td>
                                     </tr>
                                     i++;
@@ -74,17 +78,43 @@
             $("#save_btn").on("click", function () {
                 event.preventDefault();
                 var data = [];
+                var IsValid = true;
                 $("#setting_table tr").each(function () {
+
+                    var errorsSpan = document.getElementById("errors");
+                    errorsSpan.innerText = "";
+
+                    var key = $(this).find(".Key").val();
+                    var value = $(this).find(".Value").val().trim();
+
+                    if (key == "EncryptionKey") {
+
+                        if (value.length !== 16) {
+                            errorsSpan.innerText = "Please enter a key with exactly 16 characters.";
+                            IsValid = false;
+                            return;
+                        }
+
+                        if (!/^[0-9a-fA-F]+$/.test(value)) {
+                            errorsSpan.innerText = "Please enter a hexadecimal key using characters 0-9 and A-F only.";
+                            IsValid = false;
+                            return;
+                        }
+
+                    }
+
                     var item = {
-                        Key: $(this).find(".Key").val(),
-                        Value: $(this).find(".Value").val(),
+                        Key: key,
+                        Value: value,
                         UserId: $(this).find(".UserId").val()
                     }
                     data.push(item);
                 })
-                console.log(data);
+                if (!IsValid) {
+                    return false;
+                }
                 if (data.length <= 0) {
-                    ShowErrorNotification(error.responseText);
+                    ShowErrorNotification("Please add at lease one setting.");
                     return false;
                 }
                 $.ajax({

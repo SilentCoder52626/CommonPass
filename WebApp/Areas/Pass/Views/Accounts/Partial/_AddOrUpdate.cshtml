@@ -1,0 +1,29 @@
+﻿@model AccountDetailsDto
+<div class="container-fluid">
+
+    <form method="post" class="AccountDetailsForm">
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label>Account</label>
+                @Html.HiddenFor(a=>a.Id)
+                @Html.HiddenFor(a=>a.UserId)
+                @Html.TextBoxFor(a=>a.Account, new {@class="form-control Account required", @required="required", @autocomplete="off"})
+                @Html.ValidationMessageFor(a=>a.Account,"", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label>Password</label>
+                @* @Html.PasswordFor(a=>a.Password, new {@class="form-control Password required" , @required="required",@autocomplete="off"}) *@
+                <input autocomplete="off" class="form-control Password required" data-val="true" data-val-required="The Password field is required." id="Password" name="Password" required="required" type="password" value="@Model.Password">
+                @Html.ValidationMessageFor(a=>a.Password,"", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-success" id="save_account" style="float:right;"><i class="fa fa-save"></i> Save</button>
+            </div>
+        </div>
+
+    </form>
+</div>
