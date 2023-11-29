@@ -11,6 +11,7 @@ namespace DomainModule.Dto
         public string Key { get; set; }
         public string? Value { get; set; }
         public string UserId { get; set; }
+        public string? DisplayName { get; set; }
     }
     public class AppSettingModel
     {

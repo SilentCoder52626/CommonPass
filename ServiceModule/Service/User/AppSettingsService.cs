@@ -1,9 +1,11 @@
 ﻿using DomainModule.Dto;
 using DomainModule.Dto.User;
 using DomainModule.Entity;
+using DomainModule.Enums;
 using DomainModule.Exceptions;
 using DomainModule.RepositoryInterface;
 using DomainModule.ServiceInterface;
+using DomainModule.ServiceInterface.Pass;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -16,12 +18,14 @@ namespace ServiceModule.Service
     public class AppSettingsService : AppSettingsServiceInterface
     {
         private readonly AppSettingsRepositoryInterface _settingRepo;
+        private readonly IAccountDetailsService _accountDetailsService;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AppSettingsService(AppSettingsRepositoryInterface settingRepo, IUnitOfWork unitOfWork)
+        public AppSettingsService(AppSettingsRepositoryInterface settingRepo, IUnitOfWork unitOfWork, IAccountDetailsService accountDetailsService)
         {
             _settingRepo = settingRepo;
             _unitOfWork = unitOfWork;
+            _accountDetailsService = accountDetailsService;
         }
 
         public void BulkUpdateSetting(List<AppSettingDto> dto)
@@ -74,10 +78,18 @@ namespace ServiceModule.Service
             }
             else
             {
+                if (Entity.Key == AppSettingsEnum.EncryptionKey.ToString())
+                {
+                    _accountDetailsService.ReEncryptPasswordWithoutCommit(dto.UserId,dto.Value);
+                }
+
                 Entity.Value = dto.Value;
                 Entity.UserId = dto.UserId;
+
+                
                 _settingRepo.Update(Entity);
             }
+
         }
     }
 }

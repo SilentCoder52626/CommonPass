@@ -14,10 +14,10 @@
             <table class="table table-bordered " id="ViewTable">
                 <thead>
                     <tr>
-                        <th>SN</th>
-                        <th>Account</th>
-                        <th>Password</th>
-                        <th>Action</th>
+                        <th width="5%">SN</th>
+                        <th width="40%">Account</th>
+                        <th width="35%">Password</th>
+                        <th width="20%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +29,7 @@
                         <tr>
                             <td>@i</td>
                             <td><input type="text" class="form-control" readonly value="@data.Account" /></td>
-                            <td><input type="password" value="@data.Password" class="form-control" readonly /></td>
+                            <td><input type="password" value="@data.Password" class="form-control Password" readonly /></td>
                             <td>
                                 <button class="btn btn-danger decrypt-password" data-accountId="@data.Id"><i class="fa fa-eye"></i></button> |
                                 <button class="btn btn-warning update-account" data-accountId="@data.Id"><i class="fa fa-edit"></i></button>
@@ -46,7 +46,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -56,31 +56,120 @@
                 </button>
             </div>
             <div class="modal-body" id="modalBodyContent">
-
             </div>
-          @*   <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div> *@
         </div>
     </div>
 </div>
 
 @section Scripts{
     <script>
-        $("#ViewTable").DataTable();
+        $(document).ready(function () {
+            $("#ViewTable").DataTable();
 
-        $("#add-account").click(function () {
+            $(document).on("click", "#save_account", function (event) {
+                event.preventDefault();
 
-            $.get("/Pass/Accounts/AddorUpdate", function (data) {
+                var account = $("#Account").val();
+                if (!account) {
+                    ShowInfoNotification("Account is Required.");
+                    return false;
+                }
 
-                // Update the modal body content
-                $("#modalBodyContent").html(data);
+                var pass = $("#Password").val();
+                if (!pass) {
+                    ShowInfoNotification("Password is Required.");
+                    return false;
+                }
 
-                // Show the modal
-                $("#myModal").modal('show');
+                var data = {
+                    Account: account,
+                    Password: pass,
+                    Id: $("#Id").val(),
+                    UserId: $("#UserId").val()
+                }
+
+                $.ajax({
+                    method: "POST",
+                    url: "/api/AccountDetails/AddOrUpdate",
+                    contentType: "application/json",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+                        if (response.StatusCode == 200) {
+                            ShowSuccessNotification(response.Message);
+
+                            setTimeout(function () {
+                                $('#myModal').fadeOut('slow', function () {
+                                    $(this).modal('hide');
+                                });
+                            }, 600);
+                        } else {
+                            ShowErrorNotification(response.Message);
+                        }
+
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        ShowErrorNotification(error.responseText);
+                    }
+                });
+            });
+
+
+            $("#add-account").click(function () {
+
+                $.get("/Pass/Accounts/AddorUpdate", function (data) {
+
+                    // Update the modal body content
+                    $("#modalBodyContent").html(data);
+
+                    // Show the modal
+                    $("#myModal").modal('show');
+                });
+            });
+            $(".update-account").click(function () {
+
+                var Id = $(this).attr("data-accountId");
+                $.get("/Pass/Accounts/AddorUpdate?id=" + Id, function (data) {
+
+                    $("#modalBodyContent").html(data);
+
+                    $("#myModal").modal('show');
+                });
+            });
+            $(document).on("click", ".decrypt-password", function (event) {
+
+                event.preventDefault();
+
+                var button = $(this);
+
+                var Id = button.attr("data-accountId");
+
+                $.get("/api/AccountDetails/DecryptPassword?accountId=" + Id, function (data) {
+                    console.log(data)
+                    var PassElm = button.closest("tr").find(".Password");
+
+                    $(PassElm).attr("type", "text");
+                    $(PassElm).val(data.Data.Password);
+
+                    button.html('<i class="fa fa-eye-slash"></i>');
+                    button.removeClass("btn-danger decrypt-password").addClass("btn-success encrypt-password");
+                });
+
+            });
+            $(document).on("click", ".encrypt-password", function (event) {
+                event.preventDefault();
+
+                var button = $(this);
+
+
+                var PassElm = button.closest("tr").find(".Password");
+                $(PassElm).attr("type", "password");
+                $(PassElm).val("EncryptedPassword");
+
+                button.html('<i class="fa fa-eye"></i>');
+                button.removeClass("btn-success encrypt-password").addClass("btn-danger decrypt-password");
+
             });
         });
-
     </script>
 }

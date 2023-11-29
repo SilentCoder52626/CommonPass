@@ -1,4 +1,5 @@
 ﻿using DomainModule.Dto.Pass;
+using DomainModule.Entity.Pass;
 using DomainModule.Exceptions;
 using DomainModule.RepositoryInterface.Pass;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +42,7 @@ namespace WebApp.Areas.Pass.Controllers
                     dto.Id = entity.Id;
                     dto.UserId = entity.UserId;
                     dto.Account = entity.Account;
-                    dto.Password = "EncrptedPassword";
+                    dto.Password = AccountDetails.DefaultPasswordString;
                 }
                 return PartialView("Partial/_AddOrUpdate", dto);
             }
