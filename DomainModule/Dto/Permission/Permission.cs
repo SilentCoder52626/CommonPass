@@ -48,6 +48,8 @@ namespace DomainModule.Dto
                     "Accounts", new List<string>
                     {
                         "View",
+                        "AddOrUpdate",
+                        "DecryptPassword"
                     }
                 }
         };

@@ -1,0 +1,27 @@
+﻿@model AccountDetailsDto
+<div class="container-fluid">
+
+    <form method="post" class="AccountDetailsForm">
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label>Account</label>
+                @Html.HiddenFor(a=>a.Id)
+                @Html.TextBoxFor(a=>a.Account, new {@class="form-control Account" })
+                @Html.ValidationMessageFor(a=>a.Account,"", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <label>Password</label>
+                @Html.PasswordFor(a=>a.Password, new {@class="form-control Password" })
+                @Html.ValidationMessageFor(a=>a.Password,"", new {@class = "text-danger"})
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-success" style="float:right;"><i class="fa fa-save"></i> Save</button>
+            </div>
+        </div>
+
+    </form>
+</div>

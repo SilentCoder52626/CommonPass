@@ -6,9 +6,7 @@
     <div class="h3 mb-2 text-gray-800">
         Accounts
 
-        @* <a class="btn btn-success" asp-area="Menu" asp-controller="CompanyType" asp-action="Create">
-            <i class="fa fa-plus"></i>
-        </a> *@
+        <button class="btn btn-success " id="add-account"><i class="fa fa-plus"></i></button>
     </div>
 
     <div class="card">
@@ -33,9 +31,9 @@
                             <td><input type="text" class="form-control" readonly value="@data.Account" /></td>
                             <td><input type="password" value="@data.Password" class="form-control" readonly /></td>
                             <td>
-                                @* <a class="btn btn-warning" asp-area="Menu" asp-controller="CompanyType" asp-action="Update" asp-route-id="@data.Id">
-                                    <i class="fas fa-edit"></i>
-                                </a> *@
+                                <button class="btn btn-danger decrypt-password" data-accountId="@data.Id"><i class="fa fa-eye"></i></button> |
+                                <button class="btn btn-warning update-account" data-accountId="@data.Id"><i class="fa fa-edit"></i></button>
+
                             </td>
                         </tr>
                         i++;
@@ -46,8 +44,43 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="myModelTitle">Add Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBodyContent">
+
+            </div>
+          @*   <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div> *@
+        </div>
+    </div>
+</div>
+
 @section Scripts{
     <script>
         $("#ViewTable").DataTable();
+
+        $("#add-account").click(function () {
+
+            $.get("/Pass/Accounts/AddorUpdate", function (data) {
+
+                // Update the modal body content
+                $("#modalBodyContent").html(data);
+
+                // Show the modal
+                $("#myModal").modal('show');
+            });
+        });
+
     </script>
 }
