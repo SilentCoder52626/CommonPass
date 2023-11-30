@@ -41,8 +41,9 @@ namespace WebApp.Areas.Pass.Controllers
                     var entity = _accountRepo.GetById(id.GetValueOrDefault()) ?? throw new CustomException("Account details not found.");
                     dto.Id = entity.Id;
                     dto.UserId = entity.UserId;
+                    dto.Name = entity.Name;
                     dto.Account = entity.Account;
-                    dto.Password = AccountDetails.DefaultPasswordString;
+                    dto.Pass = AccountDetails.DefaultPasswordString;
                 }
                 return PartialView("Partial/_AddOrUpdate", dto);
             }

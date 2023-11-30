@@ -15,9 +15,10 @@
                 <thead>
                     <tr>
                         <th width="5%">SN</th>
-                        <th width="40%">Account</th>
-                        <th width="35%">Password</th>
-                        <th width="20%">Action</th>
+                        <th width="30%">Account Name</th>
+                        <th width="30%">User Name</th>
+                        <th width="20%">Password</th>
+                        <th width="15%">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -29,7 +30,8 @@
                         <tr>
                             <td>@i</td>
                             <td><input type="text" class="form-control" readonly value="@data.Account" /></td>
-                            <td><input type="password" value="@data.Password" class="form-control Password" readonly /></td>
+                            <td><input type="text" value="@data.Name" class="form-control Name" readonly /></td>
+                            <td><input type="password" value="@data.Pass" class="form-control Password" readonly /></td>
                             <td>
                                 <button class="btn btn-danger decrypt-password" data-accountId="@data.Id"><i class="fa fa-eye"></i></button> |
                                 <button class="btn btn-warning update-account" data-accountId="@data.Id"><i class="fa fa-edit"></i></button>
@@ -71,7 +73,12 @@
 
                 var account = $("#Account").val();
                 if (!account) {
-                    ShowInfoNotification("Account is Required.");
+                    ShowInfoNotification("Account Name is Required.");
+                    return false;
+                }
+                var name = $("#Name").val();
+                if (!name) {
+                    ShowInfoNotification("User Name is Required.");
                     return false;
                 }
 
@@ -83,7 +90,8 @@
 
                 var data = {
                     Account: account,
-                    Password: pass,
+                    Pass: pass,
+                    Name: name,
                     Id: $("#Id").val(),
                     UserId: $("#UserId").val()
                 }
@@ -108,8 +116,7 @@
 
                     },
                     error: function (error) {
-                        console.log(error);
-                        ShowErrorNotification(error.responseText);
+                        ShowErrorNotification(error.responseJSON.title);
                     }
                 });
             });

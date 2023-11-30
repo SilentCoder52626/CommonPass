@@ -42,9 +42,10 @@ namespace ServiceModule.Service.Pass
                     {
                         AccountDetails = _detailsRepo.GetById(dto.Id) ?? throw new CustomException("Account details not found.");
                         AccountDetails.Account = dto.Account;
-                        if (dto.Password != AccountDetails.DefaultPasswordString)
+                        AccountDetails.Name = dto.Name;
+                        if (dto.Pass != AccountDetails.DefaultPasswordString)
                         {
-                            AccountDetails.Password = EncryptString(dto.Password, CipherKey);
+                            AccountDetails.Pass = EncryptString(dto.Pass, CipherKey);
                         }
                         AccountDetails.UserId = userId;
                         _detailsRepo.Update(AccountDetails);
@@ -52,7 +53,8 @@ namespace ServiceModule.Service.Pass
                     else
                     {
                         AccountDetails.Account = dto.Account;
-                        AccountDetails.Password = EncryptString(dto.Password, CipherKey);
+                        AccountDetails.Name = dto.Name;
+                        AccountDetails.Pass = EncryptString(dto.Pass, CipherKey);
                         AccountDetails.UserId = userId;
 
                         _detailsRepo.Insert(AccountDetails);
@@ -75,7 +77,7 @@ namespace ServiceModule.Service.Pass
                 var CipherKey = _settingRepo.GetByKey(AppSettingsEnum.EncryptionKey.ToString(), userId)?.Value ?? throw new CustomException("Please set your private encryption key first.");
                 var AccountDetails = _detailsRepo.GetQueryable().Where(a => a.Id == id && a.UserId == userId).FirstOrDefault() ?? throw new CustomException("Account details not found.");
 
-                var pass = DecryptString(AccountDetails.Password, CipherKey);
+                var pass = DecryptString(AccountDetails.Pass, CipherKey);
 
                 return pass;
             }
@@ -94,8 +96,8 @@ namespace ServiceModule.Service.Pass
                 var AccountDetailsOfUser = _detailsRepo.GetQueryable().Where(a => a.UserId == userId).ToList();
                 foreach (var account in AccountDetailsOfUser)
                 {
-                    var currentPass = DecryptString(account.Password, CipherKey);
-                    account.Password = EncryptString(currentPass, newKey);
+                    var currentPass = DecryptString(account.Pass, CipherKey);
+                    account.Pass = EncryptString(currentPass, newKey);
                     _detailsRepo.Update(account);
                 }
                 _unitOfWork.Complete();
@@ -111,8 +113,8 @@ namespace ServiceModule.Service.Pass
             var AccountDetailsOfUser = _detailsRepo.GetQueryable().Where(a => a.UserId == userId).ToList();
             foreach (var account in AccountDetailsOfUser)
             {
-                var currentPass = DecryptString(account.Password, CipherKey);
-                account.Password = EncryptString(currentPass, newKey);
+                var currentPass = DecryptString(account.Pass, CipherKey);
+                account.Pass = EncryptString(currentPass, newKey);
                 _detailsRepo.Update(account);
             }
             _unitOfWork.Complete();

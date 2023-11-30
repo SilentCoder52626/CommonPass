@@ -23,8 +23,9 @@ namespace InfrastructureModule.Repository.Pass
             model.Details =  GetQueryable().Where(a => a.UserId == userId).Select(x => new AccountDetailsDto()
             {
                 Account = x.Account,
+                Name = x.Name,
                 Id = x.Id,
-                Password = AccountDetails.DefaultPasswordString,
+                Pass = AccountDetails.DefaultPasswordString,
                 UserId = userId
 
             }).ToList();

@@ -62,7 +62,7 @@ namespace WebApp.ActionFilters
                     }else if(modelName == "AccountDetailsDto")
                     {
                         var modelValue = (AccountDetailsDto)argument.Value;
-                        argumentsData.Add(new KeyValuePair<string, object>(argument.Key, new AccountDetailsDto() { Account = modelValue.Account, Id = modelValue.Id, UserId = modelValue.UserId, Password = PasswordHasher(modelValue.Password) }));
+                        argumentsData.Add(new KeyValuePair<string, object>(argument.Key, new AccountDetailsDto() { Account = modelValue.Account, Id = modelValue.Id, UserId = modelValue.UserId, Pass = PasswordHasher(modelValue.Pass) }));
                     }
                     else
                     {

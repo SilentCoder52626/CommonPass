@@ -23,8 +23,12 @@ namespace InfrastructureModule.Mapping
                   .HasColumnName("account")
                   .IsRequired();
             builder
-                .Property(a => a.Password)
+                .Property(a => a.Pass)
                 .HasColumnName("password")
+                .IsRequired();
+            builder
+                .Property(a => a.Name)
+                .HasColumnName("username")
                 .IsRequired();
 
             builder

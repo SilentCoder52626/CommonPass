@@ -21,6 +21,29 @@ namespace WebApp.Areas.API.Controllers
             _accountDetailsService = accountDetailsService;
             _accountDetailsRepo = accountDetailsRepo;
         }
+        [Authorize("Account-View")]
+        [HttpGet("")]
+        public IActionResult GetAccountDetails()
+        {
+            try
+            {
+                var userId = GetCurrentUserExtension.GetCurrentUserId(this);
+                var data = _accountDetailsRepo.GetAccountDetailsModel(userId);
+
+                return Ok(new ApiResponseModel()
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Password Decrypted Successfully",
+                    Data = data
+                        
+                });
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+        }
         [Authorize("Accounts-DecryptPassword")]
         [HttpGet("DecryptPassword")]
         public IActionResult DecryptPassword(int accountId)

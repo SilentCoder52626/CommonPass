@@ -18,7 +18,8 @@ namespace DomainModule.Dto.Pass
     public class AccountDetailsCreateDto
     {
         public string Account { get; set; }
-        public string Password { get; set; }
+        public string Pass { get; set; }
+        public string Name { get; set; }
         public string UserId { get; set; }
     }
 }
