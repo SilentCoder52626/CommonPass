@@ -10,6 +10,8 @@ namespace DomainModule.Enums
     public enum AppSettingsEnum
     {
         [Display(Name = "Encryption Key")]
-        EncryptionKey
+        EncryptionKey,
+        [Display(Name = "Pin")]
+        ExportPin
     }
 }

@@ -41,7 +41,7 @@
                                             <input type="text" class="form-control" readonly value="@data.DisplayName" name="DisplayName" />
                                         </td>
                                         <td>
-                                            <input type="password" class="form-control Value" value="@data.Value" name="Value" />
+                                            <input type="password" class="form-control Value" value="@data.Value" name="Value" required="required"/>
                                             @if (data.Key == AppSettingsEnum.EncryptionKey.ToString())
                                             {
                                                 <span class="text-danger" id="errors"></span>
