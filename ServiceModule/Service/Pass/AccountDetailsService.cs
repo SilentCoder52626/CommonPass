@@ -2,6 +2,7 @@
 using DomainModule.Entity.Pass;
 using DomainModule.Enums;
 using DomainModule.Exceptions;
+using DomainModule.Helper;
 using DomainModule.RepositoryInterface;
 using DomainModule.RepositoryInterface.Pass;
 using DomainModule.ServiceInterface.Pass;
@@ -42,10 +43,10 @@ namespace ServiceModule.Service.Pass
                     {
                         AccountDetails = _detailsRepo.GetById(dto.Id) ?? throw new CustomException("Account details not found.");
                         AccountDetails.Account = dto.Account;
-                        AccountDetails.Name = dto.Name;
+                        AccountDetails.Name = dto.UserName;
                         if (dto.Pass != AccountDetails.DefaultPasswordString)
                         {
-                            AccountDetails.Pass = EncryptString(dto.Pass, CipherKey);
+                            AccountDetails.Pass = CustomPasswordEncrypter.EncryptString(dto.Pass, CipherKey);
                         }
                         AccountDetails.UserId = userId;
                         _detailsRepo.Update(AccountDetails);
@@ -53,8 +54,8 @@ namespace ServiceModule.Service.Pass
                     else
                     {
                         AccountDetails.Account = dto.Account;
-                        AccountDetails.Name = dto.Name;
-                        AccountDetails.Pass = EncryptString(dto.Pass, CipherKey);
+                        AccountDetails.Name = dto.UserName;
+                        AccountDetails.Pass = CustomPasswordEncrypter.EncryptString(dto.Pass, CipherKey);
                         AccountDetails.UserId = userId;
 
                         _detailsRepo.Insert(AccountDetails);
@@ -77,7 +78,7 @@ namespace ServiceModule.Service.Pass
                 var CipherKey = _settingRepo.GetByKey(AppSettingsEnum.EncryptionKey.ToString(), userId)?.Value ?? throw new CustomException("Please set your private encryption key first.");
                 var AccountDetails = _detailsRepo.GetQueryable().Where(a => a.Id == id && a.UserId == userId).FirstOrDefault() ?? throw new CustomException("Account details not found.");
 
-                var pass = DecryptString(AccountDetails.Pass, CipherKey);
+                var pass = CustomPasswordEncrypter.DecryptString(AccountDetails.Pass, CipherKey);
 
                 return pass;
             }
@@ -96,8 +97,8 @@ namespace ServiceModule.Service.Pass
                 var AccountDetailsOfUser = _detailsRepo.GetQueryable().Where(a => a.UserId == userId).ToList();
                 foreach (var account in AccountDetailsOfUser)
                 {
-                    var currentPass = DecryptString(account.Pass, CipherKey);
-                    account.Pass = EncryptString(currentPass, newKey);
+                    var currentPass = CustomPasswordEncrypter.DecryptString(account.Pass, CipherKey);
+                    account.Pass = CustomPasswordEncrypter.EncryptString(currentPass, newKey);
                     _detailsRepo.Update(account);
                 }
                 _unitOfWork.Complete();
@@ -113,61 +114,15 @@ namespace ServiceModule.Service.Pass
             var AccountDetailsOfUser = _detailsRepo.GetQueryable().Where(a => a.UserId == userId).ToList();
             foreach (var account in AccountDetailsOfUser)
             {
-                var currentPass = DecryptString(account.Pass, CipherKey);
-                account.Pass = EncryptString(currentPass, newKey);
+                var currentPass = CustomPasswordEncrypter.DecryptString(account.Pass, CipherKey);
+                account.Pass = CustomPasswordEncrypter.EncryptString(currentPass, newKey);
                 _detailsRepo.Update(account);
             }
             _unitOfWork.Complete();
 
         }
 
-        private static string EncryptString(string plainText, string key)
-        {
-            using (Aes aesAlg = Aes.Create())
-            {
-                aesAlg.Key = Encoding.UTF8.GetBytes(key);
-                aesAlg.GenerateIV();
-
-                ICryptoTransform encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-
-                using (MemoryStream msEncrypt = new MemoryStream())
-                {
-                    using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter swEncrypt = new StreamWriter(csEncrypt))
-                        {
-                            swEncrypt.Write(plainText);
-                        }
-                    }
-
-                    return Convert.ToBase64String(aesAlg.IV.Concat(msEncrypt.ToArray()).ToArray());
-                }
-            }
-        }
-
-        private static string DecryptString(string cipherText, string key)
-        {
-            byte[] cipherBytes = Convert.FromBase64String(cipherText);
-
-            using (Aes aesAlg = Aes.Create())
-            {
-                aesAlg.Key = Encoding.UTF8.GetBytes(key);
-                aesAlg.IV = cipherBytes.Take(16).ToArray();
-
-                ICryptoTransform decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-
-                using (MemoryStream msDecrypt = new MemoryStream(cipherBytes.Skip(16).ToArray()))
-                {
-                    using (CryptoStream csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader srDecrypt = new StreamReader(csDecrypt))
-                        {
-                            return srDecrypt.ReadToEnd();
-                        }
-                    }
-                }
-            }
-        }
+       
 
     }
 }

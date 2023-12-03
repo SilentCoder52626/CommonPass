@@ -49,7 +49,8 @@ namespace DomainModule.Dto
                     {
                         "View",
                         "AddOrUpdate",
-                        "DecryptPassword"
+                        "DecryptPassword",
+                        "Export",
                     }
                 }
         };
