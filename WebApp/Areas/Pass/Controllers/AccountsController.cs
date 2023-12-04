@@ -43,7 +43,7 @@ namespace WebApp.Areas.Pass.Controllers
             try
             {
                 var dto = new AccountDetailsDto();
-                if(id.GetValueOrDefault() > 0)
+                if (id.GetValueOrDefault() > 0)
                 {
                     var entity = _accountRepo.GetById(id.GetValueOrDefault()) ?? throw new CustomException("Account details not found.");
                     dto.Id = entity.Id;
@@ -62,17 +62,22 @@ namespace WebApp.Areas.Pass.Controllers
         }
         [Authorize("Accounts-Export")]
         [HttpGet]
-        public IActionResult ExportToExcel()
+        public IActionResult ExportAccountsToExcel(string pin)
         {
             try
             {
                 var userId = GetCurrentUserExtension.GetCurrentUserId(this);
-                var accountExportDto = _accountRepo.GetAccountDetailsWithDecryptedData(userId);
                 var ExcelPin = _appSettingRepo.GetByKey(AppSettingsEnum.ExportPin.ToString(), userId)?.Value;
+
                 if (String.IsNullOrEmpty(ExcelPin))
                 {
                     throw new CustomException("Please set Pin in Appsetting.");
                 }
+                if (pin != ExcelPin)
+                {
+                    throw new CustomException("Incorrect PIN.");
+                }
+                var accountExportDto = _accountRepo.GetAccountDetailsWithDecryptedData(userId);
                 using (var workbook = new XLWorkbook())
                 {
                     var worksheet = workbook.Worksheets.Add("AccountDetails");
@@ -94,7 +99,7 @@ namespace WebApp.Areas.Pass.Controllers
                     companyCell.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
 
                     // Set the styling for the customer details row
-                    
+
                     for (int rowIndex = 2; rowIndex <= 3; rowIndex++)
                     {
                         var detailsRow = worksheet.Row(rowIndex);
@@ -128,7 +133,7 @@ namespace WebApp.Areas.Pass.Controllers
                     worksheet.Range(infoTextCell, worksheet.Cell(6, accountExportDto.DataTable.Columns.Count)).Merge();
 
                     // Set starting row for DataTable data
-                    int dataStartRow = 7;
+                    int dataStartRow = 8;
 
 
                     // Set DataTable styling
@@ -152,7 +157,7 @@ namespace WebApp.Areas.Pass.Controllers
             {
                 CommonLogger.LogError(ex.Message, ex);
                 _notify.AddErrorToastMessage(ex.Message);
-                return RedirectToAction(nameof(Index));
+                return Redirect("/");
             }
         }
     }

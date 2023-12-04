@@ -67,16 +67,16 @@
     <script>
         $(document).ready(function () {
             $("#ViewTable").DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                    {
-                        extend: 'excel',
-                        text: '<i class="fa fa-file-excel"></i>',
-                        action: function (e, dt, button, config) {
-                            window.location.href = '/Pass/Accounts/ExportToExcel';
-                        }
-                    }
-                ]
+                //dom: 'Bfrtip',
+                // buttons: [
+                //     {
+                //         extend: 'excel',
+                //         text: '<i class="fa fa-file-excel"></i>',
+                //         action: function (e, dt, button, config) {
+                //             window.location.href = '/Pass/Accounts/ExportToExcel';
+                //         }
+                //     }
+                // ]
             });
 
             $(document).on("click", "#save_account", function (event) {
@@ -87,7 +87,7 @@
                     ShowInfoNotification("Account Name is Required.");
                     return false;
                 }
-                var name = $("#Name").val();
+                var name = $("#UserName").val();
                 if (!name) {
                     ShowInfoNotification("User Name is Required.");
                     return false;
@@ -102,7 +102,7 @@
                 var data = {
                     Account: account,
                     Pass: pass,
-                    Name: name,
+                    UserName: name,
                     Id: $("#Id").val(),
                     UserId: $("#UserId").val()
                 }
@@ -120,7 +120,9 @@
                                 $('#myModal').fadeOut('slow', function () {
                                     $(this).modal('hide');
                                 });
-                            }, 600);
+                                location.reload();
+                            }, 800);
+
                         } else {
                             ShowErrorNotification(response.Message);
                         }

@@ -75,8 +75,8 @@ namespace ServiceModule.Service.Pass
         {
             try
             {
-                var CipherKey = _settingRepo.GetByKey(AppSettingsEnum.EncryptionKey.ToString(), userId)?.Value ?? throw new CustomException("Please set your private encryption key first.");
                 var AccountDetails = _detailsRepo.GetQueryable().Where(a => a.Id == id && a.UserId == userId).FirstOrDefault() ?? throw new CustomException("Account details not found.");
+                var CipherKey = _settingRepo.GetByKey(AppSettingsEnum.EncryptionKey.ToString(), userId)?.Value ?? throw new CustomException("Please set your private encryption key first.");
 
                 var pass = CustomPasswordEncrypter.DecryptString(AccountDetails.Pass, CipherKey);
 
