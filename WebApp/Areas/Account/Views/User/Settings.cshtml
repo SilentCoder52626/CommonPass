@@ -81,14 +81,13 @@
                 var IsValid = true;
                 $("#setting_table tr").each(function () {
 
-                    var errorsSpan = document.getElementById("errors");
-                    errorsSpan.innerText = "";
-
+                   
                     var key = $(this).find(".Key").val();
                     var value = $(this).find(".Value").val().trim();
 
                     if (key == "EncryptionKey") {
-
+                        var errorsSpan = document.getElementById("errors");
+                        errorsSpan.innerText = "";
                         if (value.length !== 16) {
                             errorsSpan.innerText = "Please enter a key with exactly 16 characters.";
                             IsValid = false;

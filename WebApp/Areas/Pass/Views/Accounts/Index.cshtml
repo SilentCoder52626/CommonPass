@@ -129,7 +129,8 @@
 
                     },
                     error: function (error) {
-                        ShowErrorNotification(error.responseJSON.title);
+                        console.log(error)
+                        ShowErrorNotification(error.responseText);
                     }
                 });
             });
