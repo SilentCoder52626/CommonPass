@@ -1,14 +1,14 @@
 # Common Pass 
 
 ## What is Common Pass ?
-- Common Pass is web app that allows user to store their credential in a systematic and secure way more than you think.
+- Common Pass is web app that allows user to store their credential in a systematic and secure way. More secured than you think.
 
 ## Why Common Pass ?
 This is my personal experience, having account in multiple website and services, I used to use similar sets of credential for overall every services. But the problem started when there are some application which needed it's user to update their credentials for every time interval and even wrose is that it didn't allow using credentials used last five time. The confusion started from there.
   
  And don't get me started on fingerprint logins. Sure, it's convenient, but it's so easy that I've practically forgotten what a password even looks like.
   
-- So, Common Pass is a Web application which can be accessed through any browser (Computer or Mobile) where you can keep your credential safe and access any time you forget you credentials.
+- So, Common Pass is a Web application which can be accessed through any browser (Pc or Mobile) where you can keep your credential safe and access any time you forget you credentials.
 - The credentials will be fully encrypted. Even the Encryption key to encrypt the users Credential is entered by user themself.
 
 ## What can you do in Common Pass ?
