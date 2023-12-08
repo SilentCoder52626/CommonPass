@@ -30,7 +30,8 @@ This is my personal experience, having account in multiple website and services,
 - Clone the Repository
 - Setup Database Connection In appsetting.json file as per your system credentials
    (Server=localhost;Database=commonpass;Uid=root;Pwd=;)
--  Add a databse name as appsetting (here commonpass)
+- Copy the AppSetting.Developement.json file and save new file as appsetting.json
+- Add a databse name as appsetting (here commonpass)
 - Run Command 'update-database' in terminal targeting InfrastructureModule to create database table structure.
 - You can Build and run the application now.
 - Default Super-Admin Credentials (email : admin@gmail.com, pass: admin)
