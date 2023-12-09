@@ -13,5 +13,6 @@ namespace DomainModule.ServiceInterface.Pass
         string DecryptAndShowPassword(int id,string userId);
         void ReEncryptPassword(string userId,string newKey);
         void ReEncryptPasswordWithoutCommit(string userId,string newKey);
+        void RemoveAccount(int accountId, string userId);
     }
 }

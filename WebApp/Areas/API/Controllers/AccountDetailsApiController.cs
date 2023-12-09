@@ -69,6 +69,27 @@ namespace WebApp.Areas.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize("Accounts-AddOrUpdate")]
+        [HttpDelete("RemoveAccount/{accountId}")]
+        public IActionResult RemoveAccount(int accountId)
+        {
+            try
+            {
+                var userId = GetCurrentUserExtension.GetCurrentUserId(this);
+                _accountDetailsService.RemoveAccount(accountId, userId);
+
+                return Ok(new ApiResponseModel()
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Account Details Deleted Successfully.",
+                });
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+        }
 
         [Authorize("Accounts-AddOrUpdate")]
         [HttpPost("AddOrUpdate")]

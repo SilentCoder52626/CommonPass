@@ -122,7 +122,25 @@ namespace ServiceModule.Service.Pass
 
         }
 
-       
+        public void RemoveAccount(int accountId, string userId)
+        {
+            try
+            {
+                using (var tx = _unitOfWork.BeginTransaction())
+                {
+                    var AccountDetail = _detailsRepo.GetQueryable().Where(a => a.UserId == userId && a.Id == accountId).FirstOrDefault() ?? throw new CustomException("Account details not found.");
 
+                    _detailsRepo.Delete(AccountDetail);
+
+                    _unitOfWork.Complete();
+                    tx.Commit();
+
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
