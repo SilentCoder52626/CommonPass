@@ -75,7 +75,7 @@ namespace ServiceModule.Service.Email
 		private MimeMessage CreateEmailMessage(MessageDto message)
 		{
 			var emailMessage = new MimeMessage();
-			emailMessage.From.Add(new MailboxAddress("email", _emailConfig.From));
+			emailMessage.From.Add(new MailboxAddress(message.Subject, _emailConfig.From));
 			emailMessage.To.AddRange(message.To);
 			emailMessage.Subject = message.Subject;
 
