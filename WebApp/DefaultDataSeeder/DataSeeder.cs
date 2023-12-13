@@ -8,7 +8,7 @@ namespace WebApp.DefaultDataSeeder
 {
     public class DataSeeder
     {
-  
+
         public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
@@ -24,6 +24,9 @@ namespace WebApp.DefaultDataSeeder
                     "User-ResetPassword",
                     "User-Update",
                     "Accounts-View",
+                    "Accounts-AddOrUpdate",
+                    "Accounts-DecryptPassword",
+                    "Accounts-Export"
 
                 };
                 //Roles
@@ -32,14 +35,14 @@ namespace WebApp.DefaultDataSeeder
 
                 if (!await roleManager.RoleExistsAsync(RoleSuperAdmin))
                     await roleManager.CreateAsync(new IdentityRole(RoleSuperAdmin));
-                
+
                 if (!await roleManager.RoleExistsAsync(RoleGeneral))
                 {
                     await roleManager.CreateAsync(new IdentityRole(RoleGeneral));
                     await roleService.AssignPermissionInBulk(RoleGeneral, Permissions);
                 }
-                    
-    
+
+
                 //Users
                 var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 string adminUserEmail = "admin@gmail.com";
@@ -47,7 +50,7 @@ namespace WebApp.DefaultDataSeeder
                 var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
                 if (adminUser == null)
                 {
-                    var newAdminUser = new User("admin","admin", adminUserEmail, User.TypeSuperAdmin)
+                    var newAdminUser = new User("admin", "admin", adminUserEmail, User.TypeSuperAdmin)
                     {
                         EmailConfirmed = true
                     };
