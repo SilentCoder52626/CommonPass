@@ -40,7 +40,7 @@ namespace InfrastructureModule.Mapping
             builder
                   .Property(a => a.Browser)
                    .HasColumnName("browser")
-                  .HasMaxLength(100);
+                  .HasMaxLength(500);
 
             builder
                  .Property(a => a.ActionName)

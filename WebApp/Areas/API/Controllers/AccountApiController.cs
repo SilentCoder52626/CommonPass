@@ -1,7 +1,6 @@
 ﻿using DomainModule.Dto.User;
 using DomainModule.Entity;
 using DomainModule.ServiceInterface.Account;
-using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -51,7 +50,6 @@ namespace WebApp.Areas.API.Controllers
 						JwtKey = _configuration["JWT:Secret"]
 					};
 					var token = _tokenGenerator.GenerateToken(tokenDto);
-					//BackgroundJob.Enqueue(() => Console.WriteLine(token));
 					return Ok(token);
 				}
 				return BadRequest("Incorrect user name or password");

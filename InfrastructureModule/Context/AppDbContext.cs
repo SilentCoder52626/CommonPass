@@ -45,7 +45,7 @@ namespace InfrastructureModule.Context
             var conString = _configuration.GetConnectionString("DefaultConnection");
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseLazyLoadingProxies().UseMySql(conString, ServerVersion.AutoDetect(conString));
+                optionsBuilder.UseLazyLoadingProxies().UseSqlServer(conString);
             }
         }
         public virtual async Task<int> SaveChangesAsync()

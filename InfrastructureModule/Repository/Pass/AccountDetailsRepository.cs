@@ -14,7 +14,6 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ZstdSharp.Unsafe;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace InfrastructureModule.Repository.Pass
