@@ -24,6 +24,9 @@ namespace WebApp.DefaultDataSeeder
                     "User-ResetPassword",
                     "User-Update",
                     "Accounts-View",
+                    "Accounts-AddOrUpdate",
+                    "Accounts-DecryptPassword",
+                    "Accounts-Export"
 
                 };
                 //Roles
