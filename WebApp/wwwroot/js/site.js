@@ -21,7 +21,8 @@ $(document).ready(function () {
     });
 
 
-    $(document).on("click", "#ExportAccounts", function () {
+    $(document).on("click", ".ExportAccounts", function () {
+        event.preventDefault();
         $.confirm({
             title: 'To continue your download!',
             content: '' +
