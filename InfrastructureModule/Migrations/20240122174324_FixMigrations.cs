@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace InfrastructureModule.Migrations
 {
     /// <inheritdoc />
-    public partial class ForSQLServer : Migration
+    public partial class FixMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,10 +23,10 @@ namespace InfrastructureModule.Migrations
                     ip_address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     page_accessed = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     session_id = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    url_referer = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    url_referer = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     user_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     user_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    browser = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    browser = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     data = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     query_string = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     action_on = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -103,11 +103,11 @@ namespace InfrastructureModule.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ip_address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
-                    browser = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    browser = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     user_id = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     type = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     table_name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    action_on = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2023, 12, 13, 21, 47, 45, 359, DateTimeKind.Local).AddTicks(3890)),
+                    action_on = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValue: new DateTime(2024, 1, 22, 23, 28, 24, 884, DateTimeKind.Local).AddTicks(3881)),
                     old_values = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     new_values = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AffectedColumns = table.Column<string>(type: "nvarchar(max)", nullable: true),

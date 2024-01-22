@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace InfrastructureModule.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231213162246_IncreaseActivityLogBrowserString")]
-    partial class IncreaseActivityLogBrowserString
+    [Migration("20240122174324_FixMigrations")]
+    partial class FixMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,8 +90,8 @@ namespace InfrastructureModule.Migrations
                         .HasColumnName("status");
 
                     b.Property<string>("UrlReferrer")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)")
                         .HasColumnName("url_referer");
 
                     b.Property<string>("UserId")
@@ -154,14 +154,14 @@ namespace InfrastructureModule.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Browser")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("browser");
 
                     b.Property<DateTime>("DateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2023, 12, 13, 22, 7, 45, 880, DateTimeKind.Local).AddTicks(5436))
+                        .HasDefaultValue(new DateTime(2024, 1, 22, 23, 28, 24, 884, DateTimeKind.Local).AddTicks(3881))
                         .HasColumnName("action_on");
 
                     b.Property<string>("IpAddress")
