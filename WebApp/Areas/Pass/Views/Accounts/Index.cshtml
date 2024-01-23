@@ -84,7 +84,7 @@
 
             $(document).on("click", "#save_account", function (event) {
                 event.preventDefault();
-
+                BlockWindow("Saving..");
                 var account = $("#Account").val();
                 if (!account) {
                     ShowInfoNotification("Account Name is Required.");
@@ -134,6 +134,9 @@
                     error: function (error) {
                         console.log(error)
                         ShowErrorNotification(error.responseText);
+                    },
+                    complete: function () {
+                        UnBlockWindow();
                     }
                 });
             });
@@ -176,6 +179,7 @@
                             text: 'Yes',
                             btnClass: 'btn-red',
                             action: function () {
+                                BlockWindow();
                                 $.ajax({
                                     url: `/api/AccountDetails/RemoveAccount/${Id}`,
                                     type: 'DELETE',
@@ -195,6 +199,8 @@
                                     },
                                     error: function (error) {
                                         ShowErrorNotification(error.responseText);
+                                    }, complete: function () {
+                                        UnBlockWindow();
                                     }
                                 });
                             }

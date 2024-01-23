@@ -160,6 +160,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-DataSeeder.SeedUsersAndRolesAsync(app).Wait();
+await DataSeeder.SeedUsersAndRolesAsync(app);
 
 app.Run();

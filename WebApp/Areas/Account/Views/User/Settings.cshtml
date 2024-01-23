@@ -77,6 +77,7 @@
         $(document).ready(function () {
             $("#save_btn").on("click", function () {
                 event.preventDefault();
+                BlockWindow();
                 var data = [];
                 var IsValid = true;
                 $("#setting_table tr").each(function () {
@@ -132,6 +133,8 @@
                     error: function (error) {
                         console.log(error)
                         ShowErrorNotification(error.responseText);
+                    }, complete: function () {
+                        UnBlockWindow();
                     }
 
                 })

@@ -24,33 +24,35 @@ namespace ServiceModule.Service
 
         public async Task Create(ActivityLogDto dto)
         {
-            using var tx = await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadUncommitted);
             try
             {
-                var activityLog = new Activity()
+                using var tx = await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadUncommitted);
                 {
-                    ActionName = dto.ActionName,
-                    ActionOn = dto.ActionOn,
-                    Area = dto.Area,
-                    IpAddress = dto.IpAddress,
-                    PageAccessed = dto.PageAccessed,
-                    Browser = dto.Browser,
-                    ControllerName = dto.ControllerName,
-                    Data = dto.Data,
-                    QueryString = dto.QueryString,
-                    SessionId = dto.SessionId,
-                    Status = dto.Status,
-                    UrlReferrer = dto.UrlReferrer,
-                    UserId = dto.UserId,
-                    UserName = dto.UserName
-                };
-                await _activitytLogRepo.InsertAsync(activityLog).ConfigureAwait(false);
-                await _unitOfWork.CompleteAsync().ConfigureAwait(false);
-                await tx.CommitAsync().ConfigureAwait(false);
+
+                    var activityLog = new Activity()
+                    {
+                        ActionName = dto.ActionName,
+                        ActionOn = dto.ActionOn,
+                        Area = dto.Area,
+                        IpAddress = dto.IpAddress,
+                        PageAccessed = dto.PageAccessed,
+                        Browser = dto.Browser,
+                        ControllerName = dto.ControllerName,
+                        Data = dto.Data,
+                        QueryString = dto.QueryString,
+                        SessionId = dto.SessionId,
+                        Status = dto.Status,
+                        UrlReferrer = dto.UrlReferrer,
+                        UserId = dto.UserId,
+                        UserName = dto.UserName
+                    };
+                    await _activitytLogRepo.InsertAsync(activityLog).ConfigureAwait(false);
+                    await _unitOfWork.CompleteAsync().ConfigureAwait(false);
+                    await tx.CommitAsync().ConfigureAwait(false);
+                }
             }
             catch (Exception ex)
             {
-                await tx.RollbackAsync().ConfigureAwait(false);
                 throw;
             }
         }
