@@ -24,7 +24,7 @@ This is my personal experience, having account in multiple website and services,
 ## Architecture, pattern , technologies 
 - Clean Architecture is used.
 - Unit of work and Repository pattern is used.
-- dot net core 7 with MySQL
+- dot net core 7 with MySQL (for SQL Sever - Use Branch SqlServer)
 
 ## System Installation
 - Clone the Repository
