@@ -134,10 +134,8 @@
                     error: function (error) {
                         console.log(error)
                         ShowErrorNotification(error.responseText);
-                    },
-                    complete: function () {
-                        UnBlockWindow();
                     }
+                    
                 });
             });
 
