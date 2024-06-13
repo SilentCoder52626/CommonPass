@@ -127,6 +127,7 @@
         $(document).on("click", ".AssingnAllOfModule",
             (e) => {
                 e.preventDefault();
+                BlockWindow();
                 let target = e.target;
                 let RoleId = $("#RoleId").val();
                 let Module = $(target).data("module");
@@ -159,6 +160,9 @@
                         //    notifyError(e.responseJSON.errors);
                         //}
                         //$('#loader').hide();
+                    },
+                    complete: function () {
+                        UnBlockWindow();
                     }
                 });
 
@@ -167,6 +171,7 @@
         $(document).on("click", ".UnAssingnAllOfModule",
             (e) => {
                 e.preventDefault();
+                BlockWindow();
                 let target = e.target;
                 let RoleId = $("#RoleId").val();
                 let Module = $(target).data("module");
@@ -199,6 +204,8 @@
                         //    notifyError(e.responseJSON.errors);
                         //}
                         //$('#loader').hide();
+                    }, complete: function () {
+                        UnBlockWindow();
                     }
                 });
 
@@ -208,6 +215,7 @@
         $(document).on('click', ".AssignPermission",
             (e) => {
                 e.preventDefault();
+                BlockWindow();
                 let target = e.target;
                 let RoleId = $("#RoleId").val();
                 let Permission = $(target).data("permission");
@@ -241,6 +249,8 @@
                             //notifyError(e.responseJSON.errors);
                         }
                         $('#loader').hide();
+                    }, complete: function () {
+                        UnBlockWindow();
                     }
                 });
 
@@ -249,6 +259,7 @@
             (e) => {
 
                 e.preventDefault();
+                BlockWindow();
                 let target = e.target;
                 let RoleId = $("#RoleId").val();
                 let Permission = $(target).data("permission");
@@ -281,6 +292,8 @@
                         //    notifyError(e.responseJSON.errors);
                         //}
                         //$('#loader').hide();
+                    }, complete: function () {
+                        UnBlockWindow();
                     }
                 });
 

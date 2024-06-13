@@ -12,6 +12,7 @@ namespace WebApp.Controllers
 		{
 			return View();
 		}
+		[HttpGet]
 		[Route("Error/Error/{code:int}")]
 		public IActionResult Error(int code)
 		{

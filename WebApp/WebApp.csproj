@@ -19,9 +19,8 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.102.1" />
-    <PackageReference Include="Hangfire" Version="1.8.5" />
-    <PackageReference Include="Hangfire.MySqlStorage" Version="2.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.14" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.9">
       <PrivateAssets>all</PrivateAssets>
@@ -31,6 +30,7 @@
     <PackageReference Include="NLog" Version="5.2.3" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.3" />
     <PackageReference Include="NToastNotify" Version="8.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
   <ItemGroup>

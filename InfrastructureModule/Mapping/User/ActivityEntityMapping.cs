@@ -40,7 +40,7 @@ namespace InfrastructureModule.Mapping
             builder
                   .Property(a => a.Browser)
                    .HasColumnName("browser")
-                  .HasMaxLength(100);
+                  .HasMaxLength(500);
 
             builder
                  .Property(a => a.ActionName)
@@ -65,7 +65,7 @@ namespace InfrastructureModule.Mapping
             builder
               .Property(a => a.UrlReferrer)
                .HasColumnName("url_referer")
-               .HasMaxLength(100);
+               .HasMaxLength(1000);
 
             builder
                  .Property(a => a.ActionOn)

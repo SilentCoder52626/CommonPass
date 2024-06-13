@@ -14,7 +14,18 @@ function ShowErrorNotification(message) {
 function ShowWarningNotification(message) {
     toastr["warning"](message)
 }
+function BlockWindow(message) {
+    const blockScreen = $('#block-screen');
+    const loadingMessage = message || 'Loading...';
 
+    blockScreen.find('.loading-message').text(loadingMessage);
+    blockScreen.removeClass('hidden');
+}
+
+function UnBlockWindow() {
+    const blockScreen = $('#block-screen');
+    blockScreen.addClass('hidden');
+}
 $(document).ready(function () {
     $('.drop-down').select2({
         placeholder: '--Select--'
