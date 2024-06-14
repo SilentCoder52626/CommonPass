@@ -120,11 +120,11 @@ builder.Services.AddSession(options =>
 builder.Services.Configure<CookiePolicyOptions>(
                    options =>
                    {
-                       // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-
                        options.MinimumSameSitePolicy = SameSiteMode.Lax;
+                       options.Secure = CookieSecurePolicy.None;
                    }
                );
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen();

@@ -16,16 +16,22 @@ namespace WebApp.ActionFilters
     public class ActivityLogFilters : ActionFilterAttribute
     {
         private readonly IActivityLogService _activityService;
+        private readonly IConfiguration _configuration;
 
-        public ActivityLogFilters(IActivityLogService activityService)
+        public ActivityLogFilters(IActivityLogService activityService, IConfiguration configuration)
         {
             _activityService = activityService;
+            _configuration = configuration;
         }
 
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var controllerName = ((ControllerBase)context.Controller)
+            var RecordActivity = _configuration["RecordActivityLog"];
+            if (RecordActivity == "True")
+            {
+
+                var controllerName = ((ControllerBase)context.Controller)
                .ControllerContext.ActionDescriptor.ControllerName;
 
             var actionName = ((ControllerBase)context.Controller)
@@ -55,11 +61,12 @@ namespace WebApp.ActionFilters
                 foreach (var argument in arguments)
                 {
                     var modelName = (argument.Value).GetType().Name;
-                    if(modelName == "LoginViewModel")
+                    if (modelName == "LoginViewModel")
                     {
                         var modelValue = (LoginViewModel)argument.Value;
                         argumentsData.Add(new KeyValuePair<string, object>(argument.Key, new LoginViewModel() { Email = modelValue.Email, ExternalProviders = modelValue.ExternalProviders, RememberMe = modelValue.RememberMe, ReturnUrl = modelValue.ReturnUrl, Password = PasswordHasher(modelValue.Password) }));
-                    }else if(modelName == "AccountDetailsDto")
+                    }
+                    else if (modelName == "AccountDetailsDto")
                     {
                         var modelValue = (AccountDetailsDto)argument.Value;
                         argumentsData.Add(new KeyValuePair<string, object>(argument.Key, new AccountDetailsDto() { Account = modelValue.Account, Id = modelValue.Id, UserId = modelValue.UserId, Pass = PasswordHasher(modelValue.Pass) }));
@@ -100,7 +107,7 @@ namespace WebApp.ActionFilters
                 Browser = browser,
                 ControllerName = controllerName,
                 Data = data,
-                QueryString= queryString,
+                QueryString = queryString,
                 SessionId = session,
                 Status = statusCode,
                 UrlReferrer = uriRef,
@@ -108,6 +115,7 @@ namespace WebApp.ActionFilters
                 UserName = userName
             };
             await _activityService.Create(activityDto);
+        }
             await next();
         }
 
