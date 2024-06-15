@@ -92,12 +92,14 @@
                         if (value.length !== 16) {
                             errorsSpan.innerText = "Please enter a key with exactly 16 characters.";
                             IsValid = false;
+                            UnBlockWindow();
                             return;
                         }
 
                         if (!/^[0-9a-fA-F]+$/.test(value)) {
                             errorsSpan.innerText = "Please enter a hexadecimal key using characters 0-9 and A-F only.";
                             IsValid = false;
+                            UnBlockWindow();
                             return;
                         }
 
@@ -111,10 +113,12 @@
                     data.push(item);
                 })
                 if (!IsValid) {
+                    UnBlockWindow();
                     return false;
                 }
                 if (data.length <= 0) {
                     ShowErrorNotification("Please add at lease one setting.");
+                    UnBlockWindow();
                     return false;
                 }
                 $.ajax({
