@@ -117,14 +117,13 @@ builder.Services.AddSession(options =>
     options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.IsEssential = true;
 });
-builder.Services.Configure<CookiePolicyOptions>(
-                   options =>
-                   {
-                       options.MinimumSameSitePolicy = SameSiteMode.Lax;
-                       options.Secure = CookieSecurePolicy.None;
-                   }
-               );
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+    options.Cookie.SameSite = SameSiteMode.Lax; 
+});
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen();
