@@ -12,7 +12,7 @@
 
     <div class="card">
         <div class="card-body">
-            <table class="table table-bordered " id="ViewTable">
+            <table class="table table-bordered" id="ViewTable">
                 <thead>
                     <tr>
                         <th width="5%">SN</th>
@@ -70,16 +70,6 @@
         $(document).ready(function () {
             $("#ViewTable").DataTable({
                 responsive: true,
-                //dom: 'Bfrtip',
-                // buttons: [
-                //     {
-                //         extend: 'excel',
-                //         text: '<i class="fa fa-file-excel"></i>',
-                //         action: function (e, dt, button, config) {
-                //             window.location.href = '/Pass/Accounts/ExportToExcel';
-                //         }
-                //     }
-                // ]
             });
 
             $(document).on("click", "#save_account", function (event) {
@@ -128,12 +118,15 @@
 
                         } else {
                             ShowErrorNotification(response.Message);
+                            UnBlockWindow();
+
                         }
 
                     },
                     error: function (error) {
-                        console.log(error)
                         ShowErrorNotification(error.responseText);
+                UnBlockWindow();
+
                     }
                     
                 });

@@ -121,10 +121,9 @@ builder.Services.Configure<CookiePolicyOptions>(
                    options =>
                    {
                        options.MinimumSameSitePolicy = SameSiteMode.Lax;
-                       options.Secure = CookieSecurePolicy.None;
                    }
                );
-
+builder.Services.AddCookiePolicy(options => options.Secure = CookieSecurePolicy.None);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen();
