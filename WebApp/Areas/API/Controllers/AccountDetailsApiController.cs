@@ -21,7 +21,7 @@ namespace WebApp.Areas.API.Controllers
             _accountDetailsService = accountDetailsService;
             _accountDetailsRepo = accountDetailsRepo;
         }
-        [Authorize("Account-View")]
+        [Authorize("Accounts-View")]
         [HttpGet("")]
         public IActionResult GetAccountDetails()
         {
@@ -33,7 +33,7 @@ namespace WebApp.Areas.API.Controllers
                 return Ok(new ApiResponseModel()
                 {
                     StatusCode = StatusCodes.Status200OK,
-                    Message = "Password Decrypted Successfully",
+                    Message = "Account Details Fetched Successfully",
                     Data = data
                         
                 });

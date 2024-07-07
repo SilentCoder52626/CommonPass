@@ -20,7 +20,7 @@ namespace WebApp.Areas.API.Controllers
             _appSettingService = appSettingService;
             _appSettingRepo = appSettingRepo;
         }
-        [HttpGet("")]
+        [HttpGet("{key}")]
         public IActionResult GetByKey(string key)
         {
             try
@@ -36,6 +36,26 @@ namespace WebApp.Areas.API.Controllers
                         Key = setting.Key,
                         Value = setting.Value
                     }
+                });
+
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.LogError(ex.Message, ex);
+                return BadRequest(ex);
+            }
+        }
+        [HttpGet("")]
+        public IActionResult GetSetting()
+        {
+            try
+            {
+                var userId = GetCurrentUserExtension.GetCurrentUserId(this);
+                var setting = _appSettingRepo.GetAppSettingModel(userId);
+                return Ok(new ApiResponseModel()
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Data = setting
                 });
 
             }
