@@ -28,7 +28,7 @@ namespace ServiceModule.Service
             _accountDetailsService = accountDetailsService;
         }
 
-        public void BulkUpdateSetting(List<AppSettingDto> dto)
+        public void BulkUpdateSetting(List<AppSettingCreateDto> dto,string userId)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace ServiceModule.Service
                 {
                     foreach (var data in dto)
                     {
-                        UpdateSettingModel(data);
+                        UpdateSettingModel(data, userId);
                     }
                     _unitOfWork.Complete();
                     tx.Commit();
@@ -48,13 +48,13 @@ namespace ServiceModule.Service
             }
         }
 
-        public void UpdateSetting(AppSettingDto dto)
+        public void UpdateSetting(AppSettingCreateDto dto,string userId)
         {
             try
             {
                 using (var tx = _unitOfWork.BeginTransaction())
                 {
-                    UpdateSettingModel(dto);
+                    UpdateSettingModel(dto, userId);
                     _unitOfWork.Complete();
                     tx.Commit();
                 }
@@ -65,26 +65,26 @@ namespace ServiceModule.Service
             }
         }
 
-        private void UpdateSettingModel(AppSettingDto dto)
+        private void UpdateSettingModel(AppSettingCreateDto dto,string userId)
         {
-            var Entity = _settingRepo.GetByKey(dto.Key, dto.UserId);
+            var Entity = _settingRepo.GetByKey(dto.Key,userId);
             if (Entity == null)
             {
                 Entity = new AppSettings();
                 Entity.Key = dto.Key;
                 Entity.Value = dto.Value;
-                Entity.UserId = dto.UserId;
+                Entity.UserId = userId;
                 _settingRepo.Insert(Entity);
             }
             else
             {
                 if (Entity.Key == AppSettingsEnum.EncryptionKey.ToString())
                 {
-                    _accountDetailsService.ReEncryptPasswordWithoutCommit(dto.UserId,dto.Value);
+                    _accountDetailsService.ReEncryptPasswordWithoutCommit(userId,dto.Value);
                 }
 
                 Entity.Value = dto.Value;
-                Entity.UserId = dto.UserId;
+                Entity.UserId = userId;
 
                 
                 _settingRepo.Update(Entity);

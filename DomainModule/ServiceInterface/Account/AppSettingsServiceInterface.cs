@@ -9,7 +9,7 @@ namespace DomainModule.ServiceInterface
 {
     public interface AppSettingsServiceInterface
     {
-        void UpdateSetting(AppSettingDto dto);
-        void BulkUpdateSetting(List<AppSettingDto> dto);
+        void UpdateSetting(AppSettingCreateDto dto, string userId);
+        void BulkUpdateSetting(List<AppSettingCreateDto> dto,string userId);
     }
 }

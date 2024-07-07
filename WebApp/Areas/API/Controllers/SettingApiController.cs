@@ -46,11 +46,12 @@ namespace WebApp.Areas.API.Controllers
             }
         }
         [HttpPost("Update")]
-        public IActionResult Update([FromBody]List<AppSettingDto> model)
+        public IActionResult Update([FromBody]List<AppSettingCreateDto> model)
         {
             try
             {
-                _appSettingService.BulkUpdateSetting(model);
+                var userId = GetCurrentUserExtension.GetCurrentUserId(this);
+                _appSettingService.BulkUpdateSetting(model,userId);
                 return Ok(new ApiResponseModel()
                 {
                     StatusCode = StatusCodes.Status200OK,

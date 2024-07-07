@@ -6,11 +6,14 @@ using System.Threading.Tasks;
 
 namespace DomainModule.Dto
 {
-    public class AppSettingDto
+    public class AppSettingCreateDto 
     {
         public string Key { get; set; }
         public string? Value { get; set; }
-        public string UserId { get; set; }
+    }
+    public class AppSettingDto :AppSettingCreateDto
+    {
+        public string? UserId { get; set; }
         public string? DisplayName { get; set; }
     }
     public class AppSettingModel
