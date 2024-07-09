@@ -2,7 +2,6 @@ using DomainModule.Entity;
 using InfrastructureModule.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -54,7 +53,8 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Tokens.EmailConfirmationTokenProvider = CustomEmailTokenProposeString;
     options.Lockout.MaxFailedAccessAttempts = 5;
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.MaxValue; // lock out forever until the user is unlocked manually by admin
-});
+}
+);
 //Token lifespan config
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
 {
@@ -80,28 +80,19 @@ builder.Services.AddMvc()
         PositionClass = ToastPositions.TopRight
     });
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = false,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
-        ValidateIssuerSigningKey = true
-    };
-})
-.AddCookie(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Ensure this is None for HTTP
-});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+               .AddJwtBearer(options =>
+               {
+                   options.TokenValidationParameters = new TokenValidationParameters()
+                   {
+                       ValidateIssuer = false,
+                       ValidateAudience = false,
+                       ValidateLifetime = true,
+                       IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+                       ValidateIssuerSigningKey = true
+                   };
+               });
+
 builder.Services.ConfigureAuthentication();
 builder.Services.UseDIConfig();
 
@@ -119,22 +110,20 @@ var emailConfig = builder.Configuration
 builder.Services.AddSingleton(emailConfig);
 
 builder.Services.AddScoped<ActivityLogFilters>();
-
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromSeconds(10);
     options.Cookie.HttpOnly = true;
     options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.IsEssential = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Ensure this is None for HTTP
 });
-
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.MinimumSameSitePolicy = SameSiteMode.Lax;
-    options.HttpOnly = HttpOnlyPolicy.Always;
-    options.Secure = CookieSecurePolicy.None; // Ensure this is None for HTTP
-});
+builder.Services.Configure<CookiePolicyOptions>(
+                   options =>
+                   {
+                       options.MinimumSameSitePolicy = SameSiteMode.Lax;
+                   }
+               );
+builder.Services.AddCookiePolicy(options => options.Secure = CookieSecurePolicy.None);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSwaggerGen();
@@ -162,9 +151,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseCookiePolicy();
-app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapControllerRoute(
     name: "MyArea",
