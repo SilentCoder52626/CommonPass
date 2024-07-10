@@ -22,6 +22,7 @@ namespace WebApp.DefaultDataSeeder
                 var Permissions = new List<string>()
                 {
                     "User-ResetPassword",
+                    "Profile-View",
                     "User-Update",
                     "Accounts-View",
                     "Accounts-AddOrUpdate",

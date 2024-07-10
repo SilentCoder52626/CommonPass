@@ -45,7 +45,7 @@ namespace WebApp.Areas.API.Controllers
             }
             return Ok(userIndexViewModels);
         }
-        [Authorize(Policy = "User-View")]
+        [Authorize(Policy = "Profile-View")]
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {

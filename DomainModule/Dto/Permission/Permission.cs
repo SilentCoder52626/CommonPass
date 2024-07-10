@@ -24,6 +24,12 @@ namespace DomainModule.Dto
                         "ResetPassword"
                     }
                 },
+            {
+                    "Profile", new List<string>
+                    {
+                        "View",
+                    }
+                },
                 {
                     "Role", new List<string>
                     {
