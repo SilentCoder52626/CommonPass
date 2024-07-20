@@ -69,6 +69,35 @@ namespace WebApp.Areas.API.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [Authorize("Accounts-DecryptPassword")]
+        [HttpGet("DecryptedDetails/{accountId}")]
+        public IActionResult DecryptedDetails(int accountId)
+        {
+            try
+            {
+                var userId = GetCurrentUserExtension.GetCurrentUserId(this);
+                var Password = _accountDetailsService.DecryptAndShowPassword(accountId, userId);
+                var Details = _accountDetailsRepo.GetQueryable().FirstOrDefault(a => a.Id == accountId) ?? throw new Exception("Account details not found.");
+                return Ok(new ApiResponseModel()
+                {
+                    StatusCode = StatusCodes.Status200OK,
+                    Message = "Password Decrypted Successfully",
+                    Data = new AccountDetailsDto
+                    {
+                        Account = Details.Account,
+                        Pass = Password,
+                        Id = Details.Id,
+                        UserId = Details.UserId,
+                        UserName = Details.Name
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                CommonLogger.LogError(ex.Message, ex);
+                return BadRequest(ex.Message);
+            }
+        }
         [Authorize("Accounts-AddOrUpdate")]
         [HttpDelete("RemoveAccount/{accountId}")]
         public IActionResult RemoveAccount(int accountId)
